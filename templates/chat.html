@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindHorizon - Mental Health Chatbot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles */
+        :root {
+            --background: #ffffff;
+            --foreground: #0f172a;
+            --card: #ffffff;
+            --card-foreground: #0f172a;
+            --primary: #3b82f6;
+            --primary-foreground: #f8fafc;
+            --secondary: #f1f5f9;
+            --secondary-foreground: #1e293b;
+            --muted: #f1f5f9;
+            --muted-foreground: #64748b;
+            --accent: #f1f5f9;
+            --accent-foreground: #1e293b;
+            --destructive: #ef4444;
+            --destructive-foreground: #f8fafc;
+            --border: #e2e8f0;
+            --input: #e2e8f0;
+            --ring: #3b82f6;
+            --radius: 0.5rem;
+            --gradient-from: #f0f4ff;
+            --gradient-to: #f5f0ff;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark {
+            --background: #0f172a;
+            --foreground: #f8fafc;
+            --card: #0f172a;
+            --card-foreground: #f8fafc;
+            --primary: #3b82f6;
+            --primary-foreground: #1e293b;
+            --secondary: #1e293b;
+            --secondary-foreground: #f8fafc;
+            --muted: #1e293b;
+            --muted-foreground: #94a3b8;
+            --accent: #1e293b;
+            --accent-foreground: #f8fafc;
+            --destructive: #7f1d1d;
+            --destructive-foreground: #f8fafc;
+            --border: #1e293b;
+            --input: #1e293b;
+            --ring: #2563eb;
+            --gradient-from: #0f172a;
+            --gradient-to: #172554;
+            --card-bg: rgba(15, 23, 42, 0.8);
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--foreground);
+            background: linear-gradient(to bottom right, var(--gradient-from), var(--gradient-to));
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Container styles */
+        .container {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        /* Header styles */
+        .header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .header-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background-color: rgba(59, 130, 246, 0.1);
+            margin-bottom: 0.75rem;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--foreground);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            max-width: 32rem;
+            margin: 0 auto;
+        }
+
+        .header p.quote {
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Card styles */
+        .card {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px var(--shadow);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Chat header styles */
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .avatar {
+            position: relative;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .avatar-status {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0.75rem;
+            height: 0.75rem;
+            background-color: #10b981;
+            border-radius: 50%;
+            border: 2px solid var(--card);
+        }
+
+        .chat-header-info h2 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--foreground);
+        }
+
+        .chat-header-info p {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+        }
+
+        .chat-header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background-color: transparent;
+            border: none;
+            color: var(--foreground);
+        }
+
+        .btn-icon:hover {
+            background-color: var(--secondary);
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #2563eb, #1d4ed8);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Messages area styles */
+        .messages-container {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .messages {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            display: flex;
+            max-width: 80%;
+        }
+
+        .message.user {
+            margin-left: auto;
+        }
+
+        .message-bubble {
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            position: relative;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(to right, #3b82f6, #2563eb);
+            color: white;
+            border-top-right-radius: 0;
+        }
+
+        .message.bot .message-bubble {
+            background-color: var(--secondary);
+            color: var(--foreground);
+            border-top-left-radius: 0;
+        }
+
+        .message-time {
+            font-size: 0.65rem;
+            opacity: 0.7;
+            display: block;
+            text-align: right;
+            margin-top: 0.25rem;
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            height: 1.5rem;
+            padding: 0 0.5rem;
+        }
+
+        .typing-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background-color: var(--muted-foreground);
+            animation: typingDot 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* Quick replies styles */
+        .quick-replies {
+            padding: 0.5rem 1rem;
+            border-top: 1px solid var(--border);
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        .quick-replies::-webkit-scrollbar {
+            display: none;
+        }
+
+        .quick-replies-container {
+            display: flex;
+            gap: 0.5rem;
+            padding-bottom: 0.25rem;
+        }
+
+        .quick-reply {
+            padding: 0.375rem 0.75rem;
+            background-color: var(--secondary);
+            color: var(--foreground);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            animation: fadeIn 0.5s ease-out;
+            white-space: nowrap;
+        }
+
+        .quick-reply:hover {
+            background-color: var(--muted);
+        }
+
+        /* Input area styles */
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 9999px;
+            border: 1px solid var(--border);
+            background-color: var(--background);
+            color: var(--foreground);
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input:focus {
+            border-color: var(--ring);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Footer styles */
+        .footer {
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typingDot {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-4px);
+            }
+        }
+
+        .animate-message-in {
+            animation: messageIn 0.3s ease-out;
+        }
+
+        /* Icons */
+        .icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            stroke-width: 2;
+            stroke: currentColor;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-icon">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                </svg>
+            </div>
+            <h1>MindHorizon</h1>
+            <p class="quote">"Sometimes the people around you won't understand your journey. They don't need to, it's not for them." – Joubert Botha</p>
+            <p>You are not alone. I'm here to listen and support you.</p>
+        </div>
+
+        <!-- Chat Card -->
+        <div class="card">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <div class="avatar">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                        </svg>
+                        <span class="avatar-status"></span>
+                    </div>
+                    <div class="chat-header-info">
+                        <h2>MindHorizon</h2>
+                        <p>Online</p>
+                    </div>
+                </div>
+                <div class="chat-header-actions">
+                    <button id="theme-toggle" class="btn btn-icon">
+                        <svg id="theme-icon" class="icon" viewBox="0 0 24 24">
+                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                        </svg>
+                    </button>
+                    <button class="btn btn-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Messages Area -->
+            <div class="messages-container" id="messages-container">
+                <div class="messages" id="chatArea">
+                    <!-- Bot welcome message -->
+                    <div class="message bot animate-message-in">
+                        <div class="message-bubble">
+                            <p>Hi there! I'm MindHorizon, your mental health companion. How are you feeling today?</p>
+                            <span class="message-time">9:30 AM</span>
+                        </div>
+                    </div>
+                    <!-- Typing indicator will be added here when needed -->
+                </div>
+            </div>
+
+            <!-- Quick Replies -->
+            <div class="quick-replies">
+                <div class="quick-replies-container" id="quick-replies">
+                    <button class="quick-reply">I'm feeling anxious</button>
+                    <button class="quick-reply">I need help with stress</button>
+                    <button class="quick-reply">I'm feeling down today</button>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <input type="text" id="user-input" class="input" placeholder="Type your message..." />
+                </div>
+                <button class="btn btn-icon">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M12 18.5a6.5 6.5 0 1 1 0-13 6.5 6.5 0 0 1 0 13Z"></path>
+                        <path d="M19 19 17.5 17.5"></path>
+                        <path d="M12 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"></path>
+                    </svg>
+                </button>
+                <button id="send-button" class="btn btn-primary" onclick="sendMessage()">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="m22 2-7 20-4-9-9-4Z"></path>
+                        <path d="M22 2 11 13"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2025 MindHorizon. Your mental health companion.</p>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const messagesContainer = document.getElementById('messages-container');
+        const chatArea = document.getElementById('chatArea'); // Changed from messages
+        const userInput = document.getElementById('user-input'); // Changed from userMessage
+        const sendButton = document.getElementById('send-button');
+        const quickRepliesContainer = document.getElementById('quick-replies');
+
+        // Theme toggle functionality
+        function setTheme(isDark) {
+            if (isDark) {
+                document.body.classList.add('dark');
+                themeIcon.innerHTML = '<path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path><path d="M12 8a2.83 2.83 0 0 1 2 5"></path><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>';
+            } else {
+                document.body.classList.remove('dark');
+                themeIcon.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>';
+            }
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Initialize theme based on user preference or system preference
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme === 'dark');
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                setTheme(prefersDark);
+            }
+        }
+
+        // Toggle theme when button is clicked
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.body.classList.contains('dark');
+            setTheme(!isDark);
+        });
+
+        // Initialize theme on page load
+        initializeTheme();
+
+        // Quick replies
+        const initialQuickReplies = [
+            { id: '1', text: 'I\'m feeling anxious' },
+            { id: '2', text: 'I need help with stress' },
+            { id: '3', text: 'I\'m feeling down today' }
+        ];
+
+        // Update quick replies based on context
+        function updateQuickReplies(input) {
+            const lowerInput = input.toLowerCase();
+            let newReplies = [];
+
+            if (lowerInput.includes('anxious') || lowerInput.includes('anxiety')) {
+                newReplies = [
+                    { id: 'a1', text: 'Tell me breathing exercises' },
+                    { id: 'a2', text: 'How can I manage anxiety?' },
+                    { id: 'a3', text: 'I need immediate help' }
+                ];
+            } else if (lowerInput.includes('stress') || lowerInput.includes('stressed')) {
+                newReplies = [
+                    { id: 's1', text: 'Stress reduction techniques' },
+                    { id: 's2', text: 'Work-life balance tips' },
+                    { id: 's3', text: 'I need to relax' }
+                ];
+            } else if (lowerInput.includes('sad') || lowerInput.includes('down')) {
+                newReplies = [
+                    { id: 'd1', text: 'How to improve mood' },
+                    { id: 'd2', text: 'I need motivation' },
+                    { id: 'd3', text: 'Talk to a professional' }
+                ];
+            } else {
+                newReplies = [
+                    { id: 'g1', text: 'Tell me about mindfulness' },
+                    { id: 'g2', text: 'I need sleep advice' },
+                    { id: 'g3', text: 'Self-care techniques' }
+                ];
+            }
+
+            renderQuickReplies(newReplies);
+        }
+
+        // Render quick replies
+        function renderQuickReplies(replies) {
+            quickRepliesContainer.innerHTML = '';
+            replies.forEach(reply => {
+                const button = document.createElement('button');
+                button.className = 'quick-reply';
+                button.textContent = reply.text;
+                button.addEventListener('click', () => {
+                    userInput.value = reply.text;
+                    userInput.focus();
+                });
+                quickRepliesContainer.appendChild(button);
+            });
+        }
+
+        // Initialize quick replies
+        renderQuickReplies(initialQuickReplies);
+
+        async function sendMessage() {
+            let userMessage = userInput.value; // Corrected: Use the existing input element
+            if (userMessage.trim() === "") return;
+
+            addMessage(userMessage, 'user'); // Add user message immediately
+
+            let response = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_id: "user1", message: userMessage })
+            });
+
+            let data = await response.json();
+
+            addMessage(data.response, 'bot'); // Add bot response
+            userInput.value = ""; // Clear input
+
+             updateQuickReplies(userMessage); // update quick replies
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;  // Scroll
+        }
+
+        // Add a message to the chat
+        function addMessage(content, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender} animate-message-in`;
+
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            messageDiv.innerHTML = `
+                <div class="message-bubble">
+                    <p>${content}</p>
+                    <span class="message-time">${timeString}</span>
+                </div>
+            `;
+
+            chatArea.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Event listeners
+        //sendButton.addEventListener('click', sendMessage);  // The button has onclick now
+
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Focus input on load
+        userInput.focus();
+    </script>
+</body>
+</html>

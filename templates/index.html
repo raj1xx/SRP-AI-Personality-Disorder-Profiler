@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mental Health Insights</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Base Styles */
+    :root {
+      --background-light: #f5f7fa;
+      --background-dark: #1f1f1f;
+      --foreground-light: #2c3e50;
+      --foreground-dark: #e0e0e0;
+      --primary: #1a73e8;
+      --primary-hover: #0d62c9;
+      --secondary: #ff6b6b;
+      --secondary-hover: #ff5252;
+      --border-light: #dfe9f3;
+      --border-dark: #2c2c2c;
+      --card-bg-light: rgba(255, 255, 255, 0.9);
+      --card-bg-dark: rgba(18, 18, 18, 0.8);
+      --success-light: #c0efca;
+      --success-dark: rgba(16, 185, 129, 0.2);
+      --success-text-light: #047857;
+      --success-text-dark: #34d399;
+      --warning-light: #fff7dc;
+      --warning-dark: rgba(245, 158, 11, 0.2);
+      --warning-text-light: #8b4513;
+      --warning-text-dark: #fbbf24;
+      --info-light: #e0f2fe;
+      --info-dark: rgba(59, 130, 246, 0.2);
+      --info-text-light: #0369a1;
+      --info-text-dark: #60a5fa;
+      --danger-light: #fee2e2;
+      --danger-dark: rgba(239, 68, 68, 0.2);
+      --danger-text-light: #b91c1c;
+      --danger-text-dark: #f87171;
+      --border-radius: 15px;
+      --transition-normal: all 0.3s ease-in-out;
+      --shadow-normal: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0.3px;
+      color: var(--foreground-light);
+      background: linear-gradient(to right, var(--background-light), var(--border-light));
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      transition: var(--transition-normal);
+    }
+
+    body.dark {
+      color: var(--foreground-dark);
+      background: linear-gradient(to right, var(--background-dark), var(--border-dark));
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+    }
+
+    /* Container Styles */
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      backdrop-filter: blur(15px);
+      background: var(--card-bg-light);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-normal);
+      overflow: hidden;
+      transition: var(--transition-normal);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      height:600px;
+    }
+
+    body.dark .container {
+      background: var(--card-bg-dark);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .card-content {
+      padding: 2rem;
+    }
+
+    /* Header Styles */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .title {
+      font-size: 1.875rem;
+      color: var(--foreground-light);
+      transition: var(--transition-normal);
+    }
+
+    body.dark .title {
+      color: var(--foreground-dark);
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: none;
+      color: var(--foreground-light);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-normal);
+    }
+
+    body.dark .theme-toggle {
+      color: var(--foreground-dark);
+    }
+
+    .theme-toggle:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      transform: scale(1.1);
+    }
+
+    body.dark .theme-toggle:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Tabs Styles */
+    .tabs {
+      width: 100%;
+    }
+
+    .tabs-list {
+      display: flex;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    body.dark .tabs-list {
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .tab-trigger {
+      padding: 0.75rem 1rem;
+      background: transparent;
+      border: none;
+      color: var(--foreground-light);
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition-normal);
+    }
+
+    body.dark .tab-trigger {
+      color: var(--foreground-dark);
+    }
+
+    .tab-trigger.active {
+      color: var(--primary);
+    }
+
+    .tab-trigger.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Form Elements */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--foreground-light);
+      transition: var(--transition-normal);
+    }
+
+    body.dark label {
+      color: var(--foreground-dark);
+    }
+
+    textarea {
+      min-height: 180px;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background-color: rgba(0, 0, 0, 0.02);
+      color: var(--foreground-light);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      resize: vertical;
+      transition: var(--transition-normal);
+    }
+
+    body.dark textarea {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: var(--foreground-dark);
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+    }
+
+    /* Button Styles */
+    .button-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: var(--transition-normal);
+      border: none;
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--primary), #0097e6);
+      color: white;
+    }
+
+    .button-primary:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    .button-primary:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .button-icon {
+      margin-right: 0.5rem;
+    }
+
+    /* Warning Message */
+    .warning-message {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: var(--warning-light);
+      color: var(--warning-text-light);
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      cursor: pointer;
+      transition: var(--transition-normal);
+    }
+
+    body.dark .warning-message {
+      background-color: var(--warning-dark);
+      color: var(--warning-text-dark);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .warning-message:hover {
+      background-color: rgba(245, 158, 11, 0.2);
+    }
+
+    body.dark .warning-message:hover {
+      background-color: rgba(245, 158, 11, 0.3);
+    }
+
+    /* Results Styles */
+    .results {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .predicted-class {
+      padding: 0.75rem;
+      border-radius: 0.375rem;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.875rem;
+      transition: var(--transition-normal);
+    }
+
+    .predicted-class.normal {
+      background-color: var(--success-light);
+      color: var(--success-text-light);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    body.dark .predicted-class.normal {
+      background-color: var(--success-dark);
+      color: var(--success-text-dark);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .predicted-class.warning {
+      background-color: var(--danger-light);
+      color: var(--danger-text-light);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    body.dark .predicted-class.warning {
+      background-color: var(--danger-dark);
+      color: var(--danger-text-dark);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    /* Dropdown Styles */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-button {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      background-color: white;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: var(--transition-normal);
+    }
+
+    body.dark .dropdown-button {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: var(--foreground-dark);
+    }
+
+    .dropdown-button:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    body.dark .dropdown-button:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .dropdown-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .dropdown-icon.open {
+      transform: rotate(180deg);
+    }
+
+    .dropdown-content {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      left: 0;
+      width: 100%;
+      background-color: white;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      z-index: 10;
+      box-shadow: var(--shadow-normal);
+      display: none;
+      transition: var(--transition-normal);
+    }
+
+    body.dark .dropdown-content {
+      background-color: rgba(30, 30, 30, 0.95);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .dropdown-content.show {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    /* Confidence Levels */
+    .confidence-item {
+      margin-bottom: 0.75rem;
+    }
+
+    .confidence-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: rgba(0, 0, 0, 0.6);
+      margin-bottom: 0.25rem;
+    }
+
+    body.dark .confidence-header {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 0.5rem;
+      background-color: rgba(0, 0, 0, 0.1);
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    body.dark .progress-bar {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .progress {
+      height: 100%;
+      background-color: var(--primary);
+      border-radius: 1rem;
+      width: 0;
+      transition: width 0.4s ease-in-out;
+    }
+
+    /* Counseling Section */
+    .counseling-section {
+      background-color: var(--info-light);
+      color: var(--info-text-light);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      min-height: 180px;
+      overflow-y: auto;
+      transition: var(--transition-normal);
+    }
+
+    body.dark .counseling-section {
+      background-color: var(--info-dark);
+      color: var(--info-text-dark);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .counseling-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .counseling-text {
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    /* Loading Animation */
+    .loading {
+      text-align: center;
+      margin-top: 1rem;
+      color: rgba(0, 0, 0, 0.5);
+      font-style: italic;
+      font-size: 0.875rem;
+      display: none;
+    }
+
+    body.dark .loading {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s linear infinite;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    body.dark .loading::after {
+      border-color: rgba(255, 255, 255, 0.1);
+      border-top-color: var(--primary);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Icons */
+    .icon {
+      display: inline-block;
+      width: 1.25rem;
+      height: 1.25rem;
+      stroke-width: 2;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-sm {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    /* Utility Classes */
+    .hidden {
+      display: none !important;
+    }
+
+    /* Shimmer Loading Effect */
+    .shimmer {
+      background: linear-gradient(-90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
+      background-size: 400% 400%;
+      animation: shimmer 1.5s infinite linear;
+    }
+
+    body.dark .shimmer {
+      background: linear-gradient(-90deg, #2a2a2a 0%, #3a3a3a 50%, #2a2a2a 100%);
+      background-size: 400% 400%;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 0%; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card-content">
+      <div class="header">
+        <h1 class="title">Mental Health Insights</h1>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <svg class="icon" id="themeIcon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="tabs" id="tabs">
+        <div class="tabs-list">
+          <button class="tab-trigger active" data-tab="inference">Inference</button>
+          <button class="tab-trigger" data-tab="recommendation">Counseling Recommendation</button>
+          <a href="http://127.0.0.1:5001/" class="tab-trigger">  <button class="tab-trigger" data-tab="aihelp">Seek AI Help</button> </a></div>
+        </div>
+
+        <div class="grid">
+          <div class="form-section">
+            <div class="form-group">
+              <label for="textInput">Enter your text here:</label>
+              <textarea id="textInput" placeholder="Type your thoughts here...">Nobody cares about me. I just want to disappear</textarea>
+            </div>
+
+            <div class="button-group">
+              <button id="predictButton" class="button button-primary">
+                <svg class="icon icon-sm button-icon" viewBox="0 0 24 24">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+                Predict
+              </button>
+              <div id="warningMessage" class="warning-message hidden">
+                <svg class="icon icon-sm" viewBox="0 0 24 24">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                Mental health support is recommended.
+              </div>
+            </div>
+            <div id="loading" class="loading">Analyzing...</div>
+          </div>
+
+          <div id="inferenceTab" class="tab-content active">
+            <div id="results" class="results hidden">
+              <div id="predictedClass" class="predicted-class normal">
+                Predicted Class: Normal
+              </div>
+
+              <div class="dropdown">
+                <button id="confidenceButton" class="dropdown-button">
+                  Confidence Levels
+                  <svg class="icon icon-sm dropdown-icon" id="dropdownIcon" viewBox="0 0 24 24">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <div id="confidenceContent" class="dropdown-content">
+                  <div id="confidenceLevels"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="recommendationTab" class="tab-content">
+            <div class="counseling-section">
+              <h3 class="counseling-title">Counseling Recommendation</h3>
+              <p id="counselingText" class="counseling-text">
+                No personalized guidance available at this time. Please submit text for analysis first.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+
+
+
+
+    // Constants
+    const CLASS_LABELS = ['Normal', 'Suicidal', 'Borderline Personality Disorder', 'Bipolar', 'Schizotypal PD'];
+
+    // DOM Elements
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const tabTriggers = document.querySelectorAll('.tab-trigger');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const textInput = document.getElementById('textInput');
+    const predictButton = document.getElementById('predictButton');
+    const warningMessage = document.getElementById('warningMessage');
+    const loading = document.getElementById('loading');
+    const results = document.getElementById('results');
+    const predictedClass = document.getElementById('predictedClass');
+    const confidenceButton = document.getElementById('confidenceButton');
+    const confidenceContent = document.getElementById('confidenceContent');
+    const confidenceLevels = document.getElementById('confidenceLevels');
+    const dropdownIcon = document.getElementById('dropdownIcon');
+    const counselingText = document.getElementById('counselingText');
+
+    // State
+    let isDarkMode = false;
+    let isDropdownOpen = false;
+    let activeTab = 'inference';
+
+
+    // Initialize
+    function init() {
+      // Check user's preferred color scheme
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        toggleTheme();
+      }
+
+      // Set up event listeners
+      themeToggle.addEventListener('click', toggleTheme);
+      predictButton.addEventListener('click', predictText);
+      warningMessage.addEventListener('click', () => showTab('recommendation'));
+      confidenceButton.addEventListener('click', toggleDropdown);
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (event) => {
+        if (!event.target.closest('.dropdown') && isDropdownOpen) {
+          toggleDropdown();
+        }
+      });
+
+      // Tab switching
+      tabTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const tab = trigger.dataset.tab;
+          showTab(tab);
+        });
+      });
+    }
+
+    // Toggle dark/light theme
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      document.body.classList.toggle('dark', isDarkMode);
+      
+      // Update moon/sun icon
+      if (isDarkMode) {
+        themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+      } else {
+        themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
+    }
+
+    // Show tab content
+    function showTab(tab) {
+      activeTab = tab;
+      
+      // Update active tab trigger
+      tabTriggers.forEach(trigger => {
+        trigger.classList.toggle('active', trigger.dataset.tab === tab);
+      });
+      
+      // Show active tab content
+      tabContents.forEach(content => {
+        content.classList.toggle('active', content.id === `${tab}Tab`);
+      });
+    }
+
+    // Toggle confidence levels dropdown
+    function toggleDropdown() {
+      isDropdownOpen = !isDropdownOpen;
+      confidenceContent.classList.toggle('show', isDropdownOpen);
+      dropdownIcon.classList.toggle('open', isDropdownOpen);
+    }
+
+    // Predict text function
+    function predictText() {
+      const text = textInput.value.trim();
+      
+      if (!text) {
+        alert('Please enter some text to analyze.');
+        return;
+      }
+      
+      // Show loading, hide results
+      loading.style.display = 'block';
+      results.classList.add('hidden');
+      warningMessage.classList.add('hidden');
+      
+      // Make API call to your backend
+      fetch('/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'text=' + encodeURIComponent(text),
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Hide loading
+        loading.style.display = 'none';
+        
+        if (data.success) {
+          // Update predicted class
+          const predictedClassText = data.predicted_class;
+          predictedClass.textContent = `Predicted Class: ${predictedClassText}`;
+          predictedClass.className = `predicted-class ${predictedClassText === 'Normal' ? 'normal' : 'warning'}`;
+          
+          // Update confidence levels
+          updateConfidenceLevels(data.probabilities);
+          
+          // Show warning if needed
+          if (predictedClassText !== 'Normal') {
+            warningMessage.classList.remove('hidden');
+            
+            // Fetch counseling recommendation
+            fetchCounselingRecommendation();
+          }
+          
+          // Show results
+          results.classList.remove('hidden');
+          
+          // Switch to inference tab
+          showTab('inference');
+        } else {
+          alert('Error: ' + (data.error || 'An unknown error occurred'));
+        }
+      })
+      .catch(error => {
+        loading.style.display = 'none';
+        console.error('Error:', error);
+        alert('An error occurred while processing your request. Please try again later.');
+      });
+    }
+
+    // Fetch counseling recommendation
+    function fetchCounselingRecommendation() {
+      fetch('/counseling')
+        .then(response => response.json())
+        .then(data => {
+          if (data.counseling_response) {
+            counselingText.textContent = data.counseling_response;
+          } else if (data.message) {
+            counselingText.textContent = data.message;
+          } else {
+            counselingText.textContent = "No personalized guidance available at this time.";
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching counseling:', error);
+          counselingText.textContent = "Error fetching guidance. Please try again later.";
+        });
+    }
+
+    // Update confidence levels
+    function updateConfidenceLevels(probabilities) {
+      // Clear previous content
+      confidenceLevels.innerHTML = '';
+      
+      // Add each confidence level
+      probabilities.forEach((probability, index) => {
+        const item = document.createElement('div');
+        item.className = 'confidence-item';
+        
+        const header = document.createElement('div');
+        header.className = 'confidence-header';
+        
+        const label = document.createElement('span');
+        label.textContent = CLASS_LABELS[index];
+        
+        const value = document.createElement('span');
+        value.textContent = `${(probability * 100).toFixed(2)}%`;
+        
+        header.appendChild(label);
+        header.appendChild(value);
+        
+        const progressBar = document.createElement('div');
+        progressBar.className = 'progress-bar';
+        
+        const progress = document.createElement('div');
+        progress.className = 'progress';
+        progress.style.width = `${probability * 100}%`;
+        
+        progressBar.appendChild(progress);
+        
+        item.appendChild(header);
+        item.appendChild(progressBar);
+        
+        confidenceLevels.appendChild(item);
+      });
+    }
+
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
+
