@@ -3,7 +3,7 @@ from langchain_groq import ChatGroq
 
 app = Flask(__name__)
 
-GROQ_API_KEY = "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"
+GROQ_API_KEY = "YOUR API KEY"
 groq_model = ChatGroq(
     temperature=0.7,
     groq_api_key=GROQ_API_KEY,
