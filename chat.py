@@ -29,7 +29,7 @@ def generate_progressive_question(conversation):
         "User: I don’t know what to do with my life.\nBot: What are some things that make you feel excited or fulfilled?"
     ]
     prompt = "Here are examples of progressive questions based on user input:\n" + "\n".join(
-        few_shot_examples) + f"\nUser's conversation history: {conversation}\nmaintain a natural convo like a therapist and help them overcome thier problems:"
+        few_shot_examples) + f"\nUser's conversation history: {conversation}\nmaintain a natural convo like a therapist medium lenght text quick to read and keep it natural and help them overcome thier problems. no need to mention previous things each time:"
 
     response = groq_model.invoke(prompt)
     return response.content if hasattr(response, "content") else "I'm not sure what to ask next."

@@ -50,7 +50,7 @@ except Exception as e:
 try:
     GROQ_API_KEY = "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"  # Replace with actual API key
     groq_model = ChatGroq(
-        temperature=0.7,
+        temperature=0.9,
         groq_api_key=GROQ_API_KEY,
         model_name="llama-3.3-70b-versatile"  # Model for counseling
     )
