@@ -48,7 +48,7 @@ except Exception as e:
 
 # Load Groq model
 try:
-    GROQ_API_KEY = "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"  # Replace with actual API key
+    GROQ_API_KEY = "KEY"  # Replace with actual API key
     groq_model = ChatGroq(
         temperature=0.9,
         groq_api_key=GROQ_API_KEY,
