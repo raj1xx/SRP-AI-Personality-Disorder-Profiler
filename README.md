@@ -38,9 +38,6 @@ A web-based application that leverages **BERT-based text classification** and **
 ```
 
 ---
-<p align="center">
- ![image](https://github.com/user-attachments/assets/5a3a8d4f-8168-4b83-8593-e492aa7d754d)
-</p>
 
 
 ## 🚀 Getting Started
