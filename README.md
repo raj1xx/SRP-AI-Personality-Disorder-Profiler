@@ -17,11 +17,9 @@ A web-based application that leverages **BERT-based text classification** and **
 - 🔁 **Progressive Conversation** with automated mental health insights after every few user inputs.
 - 🔐 Session-based architecture for personalized interaction.
 
-<center>![image](https://github.com/user-attachments/assets/bf03d194-f00d-4a6a-a8e0-5c3b929ddf2a)</center>
-
 
 ---
-
+  ![image](https://github.com/user-attachments/assets/bf03d194-f00d-4a6a-a8e0-5c3b929ddf2a)
 ## 🧬 Project Structure
 
 ```
