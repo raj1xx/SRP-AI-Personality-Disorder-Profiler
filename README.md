@@ -19,7 +19,10 @@ A web-based application that leverages **BERT-based text classification** and **
 
 
 ---
-  ![image](https://github.com/user-attachments/assets/bf03d194-f00d-4a6a-a8e0-5c3b929ddf2a)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/5a3a8d4f-8168-4b83-8593-e492aa7d754d" alt="Model Architecture" width="600"/>
+</p>
+
 ## 🧬 Project Structure
 
 ```
