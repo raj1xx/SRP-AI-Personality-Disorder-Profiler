@@ -34,6 +34,7 @@ A web-based application that leverages **BERT-based text classification** and **
 ```
 
 ---
+![image](https://github.com/user-attachments/assets/5a3a8d4f-8168-4b83-8593-e492aa7d754d)
 
 ## 🚀 Getting Started
 
@@ -98,12 +99,8 @@ This project prioritizes **user privacy**, **data anonymization**, and **ethical
 
 ## 📚 Authors
 
-- Neeraj J V (2022PECAI298)  
-- Raj Mohan R (2022PECAI324)  
-- Ranjith S (2022PECAI327)
+- Neeraj J V  
+- Raj Mohan R  
+- Ranjith S 
 
 ---
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
