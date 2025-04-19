@@ -34,7 +34,7 @@ A web-based application that leverages **BERT-based text classification** and **
 ```
 
 ---
-![image](https://github.com/user-attachments/assets/5a3a8d4f-8168-4b83-8593-e492aa7d754d)![image](https://github.com/user-attachments/assets/6cbed5e7-f8b4-4b12-a681-21cf5d63ba37)
+![image](https://github.com/user-attachments/assets/5a3a8d4f-8168-4b83-8593-e492aa7d754d)
 
 
 ## 🚀 Getting Started
