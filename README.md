@@ -103,8 +103,8 @@ This project prioritizes **user privacy**, **data anonymization**, and **ethical
 
 ## 📚 Authors
 
-- Neeraj J V  
 - Raj Mohan R  
-- Ranjith S 
+- Neeraj J V   
+- Ranjith S
 
 ---
